@@ -42,20 +42,17 @@ class DatabaseService {
 
   // Define a function that inserts breeds into the database
   Future<void> insertSellData(List<BuyModel> data) async {
-    // Get a reference to the database.
     final db = await _databaseService.database;
-
-    // Insert the Breed into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same breed is inserted twice.
-    //
-    // In this case, replace any previous data.
-    data.forEach((element) async {
-      await db.insert(
-        'ItemToSell',
-        element.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-    });
+    var dataExist = await getSellData();
+    if(dataExist!=null && dataExist.isNotEmpty) {}else{
+      data.forEach((element) async {
+        await db.insert(
+          'ItemToSell',
+          element.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      });
+    }
   }
 
   Future<dynamic> getSellData() async {
